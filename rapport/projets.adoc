@@ -1,0 +1,135 @@
+= Rapport de projet - Socle technique de développement logiciel
+Maxime Lefrançois <maxime.lefrancois@emse.fr>
+v2.0, 14-09-2019
+:imagesdir: images
+:homepage: https://ci.mines-stetienne.fr/i2si/socle/
+
+Toolbox 80 - Ingénierie et Interopérabilité des Systèmes Informatiques (I2SI)
+
+Département Informatique et Systèmes intelligents - Institut Henri Fayol
+
+Socle technique de développement logiciel - Projets
+
+NOTE: Mettez-vous à plusieurs pour joindre vos forces, mais vos rendus sont individuels, les screenshots et commits sont nominatifs et font foi, il ne doit pas y avoir de copie (dans le code).
+
+## Le projet
+
+Le programme doit pouvoir être exécuté de trois manières différentes:
+
+La première et la plus simple consiste à passer en argument une expression arithmétique. Le programme doit alors évaluer cette expression et renvoyer le résultat dans la console. Par exemple: `( 5 * 7 ) / (1 - 6)`
+
+La seconde consiste à exécuter en mode interactif (option `--interactive`) une séquence d'affectation de variable. Chaque affectation est obtenue de l'entrée standard, et validée par la touche entrée, et le programme doit évaluer l'expression et renvoyer le résultat dans la console. Par exemple:
+
+```
+entrée: a = 5*7
+sortie: a=35
+entrée: b = 1 - 6
+sortie: b=-5
+entrée: c = a / b
+sortie: c=-7
+```
+
+La troisième consiste à passer en paramètre le chemin ou l'URL vers un fichier (option `--file`), qui contient une séquence d'affectations. Le programme doit lire le fichier et évaluer l'expression ligne par ligne. Par exemple l'URL https://gitlab.emse.fr/tb3-i2si/calculator-2020/-/raw/master/src/test/resources/file1.txt
+
+
+## Rendu
+
+Votre rapport sera contenu dans une branche à votre nom dans le repository gitlab link:https://gitlab.emse.fr/tb3-i2si/calculator-2020[tb3-i2si/calculator-2020]. Ma branche s'appellerait par exemple `rapport-maxime`.
+
+Cette branche contient ce document où dans chaque section vous ajoutez un pointeur ou une séquence de pointeurs (URL, fichier, screenshot), éventuellement accompagné d'un très court texte.
+
+
+## Séquence pour commencer à travailler sur la branche de rapport
+
+- vous clonez le projet sur votre ordinateur, et faites un screenshot de votre console
+- vous créez une branche de rapport portant votre nom. Par exemple, `rapport-maxime`, et faites un screenshot de votre console
+- vous poussez cette branche, et copiez l'url qui permet de voir votre branche sur le gitlab
+- en local, vous ajoutez les screenshots dans un nouveau dossier image dans cette branche, et modifiez ce fichier pour faire apparaître ci-dessous l'URL de votre branche et les screenshots de votre console:
+
+A LA PLACE DE CE TEXTE.
+
+image::kitten.jpg[]
+
+
+
+- vous utilisez les commandes git pour commiter tous ces nouveaux fichiers et changements d'un coup, et poussez vos changement dans votre branche de rapport.
+
+Vous continuerez à enrichir votre branche de rapport de la même manière, en incluant une séquence de screenshots et d'URLs dans le fichier `rapport.adoc`, et poussez les changements en ligne.
+
+_Vous pouvez ajouter des explications, commentaires, ou liens, sous cette ligne_
+
+
+## Séquence pour commencer à travailler sur le projet calculator-2020
+
+- positionnez-vous sur la branche principale `master` (_screenshot_)
+- ouvrez le projet avec Eclipse, et tentez d'exécuter (run as maven goal) la phase `generate-sources` (_screenshot_)
+- vous faite de même en ligne de commande (_screenshot_)
+- vous identifiez quel but de quel plugin génère une erreur, et à quelle phase. Vous expliquez ceci dans une issue avec du formatage en markdown (_url_)
+- vous implémentez le minimum nécessaire pour que l'exécution de la phase `generate-sources` fonctionne. Vous n'avez besoin de modifier qu'un seul fichier. Commitez et poussez dans une branche de développement à votre nom et au numéro de l'issue, par exemple `dev-maxime-12`
+- vous créez une merge request qui fait référence à l'issue (_url_)
+
+Enrichissez votre branche de rapport en incluant une séquence de screenshots et d'URLs dans le fichier `rapport.adoc`, et poussez les changements en ligne.
+
+_Vous pouvez ajouter des explications, commentaires, ou liens, sous cette ligne_
+
+
+## Planification 1: Exécution du projet, identification des problèmes et autres améliorations possibles
+
+A ce stade, vous pouvez exécuter la phase `generate-sources`, et même la phase `test` en ligne de commande. Cependant, Eclipse peut afficher une erreur car il ne trouve pas les fichiers source java générés lors de la phase `generate-sources`. Suivez les link:https://ci.mines-stetienne.fr/i2si/socle/eclipse-error/index.html[instructions pour corriger cette erreur].
+
+- sans modifier le pom, vous trouvez la séquence de phases et de buts de plugin pour: (1) nettoyer, (2) tester, et (3) link:https://www.mojohaus.org/exec-maven-plugin/java-mojo.html[exécuter la classe Main avec des arguments]. Testez avec une expression (_URL vers fichier contenant la sortie standard de la commande_)
+- identifiez des bugs (il y en a plein) et proposez des améliorations à l'application. Vous devez créer au moins une issue chacun, et contribuer à des issues existantes pour confirmer le problème ou se mettre d'accord sur la fonctionnalité attendue. Utilisez le formatage en markdown.
+- ordonnez les issues dans le kanban https://gitlab.emse.fr/tb3-i2si/calculator-2020/-/boards , assignez une milestone et partagez-vous la responsabilité des tâches. Voir par exemple https://gitlab.emse.fr/tb3-i2si/calculator-2020/-/issues/1
+
+NOTE: A ce stade, demandez-moi de valider les issues. J'en créerai d'autres également.
+
+_Vous pouvez ajouter des explications, commentaires, ou liens, sous cette ligne_
+
+
+## Sprint de développement 1: résolutions des issues
+
+* vous vous répartissez la résolution des issues
+* chaque fonctionnalité doit avoir des tests
+* chaque modification doit être faite dans une branche de développement à votre nom et au numéro de l'issue, par exemple `dev-maxime-12`
+* chaque commit devrait avoir du sens, le message du commit doit être informatif
+* vous créez une merge request qui fait référence à l'issue (_url_)
+
+_Vous pouvez ajouter des explications, commentaires, ou liens, sous cette ligne_
+
+
+## DevOps: exécution des tests à chaque commit, et génération du rapport en HTML
+
+Vous devez mettre au point le pipeline d'intégration continue sur gitlab link:https://docs.gitlab.com/ee/ci/README.html[`.gitlab-ci.yml`]. A chaque commit, il faudrait que les tâches ci-dessous soient exécutées.
+
+- Il faut analyser la qualité du code https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html
+- Il faut exécuter la phase maven test, et faire en sorte que le résultat de l'exécution des tests unitaires s'affiche à chaque merge request. Pour cette tâche, il faut un container Docker dans lequel on peut exécuter maven.
+- Il faut générer une version html de votre rapport avec asciidoctor, et exposer le dossier `rapport` comme artefact.
+- Il faut packager l'application en quatre jars: un jar pour les binaires, un jar pour la javadoc, un jar pour les sources, un jar exécutable qui contient les binaires et toutes les dépendances. Ces jars doivent être des artefacts du job.
+
+Ce pipeline doit être mis au point dans une branche à part. Vous devez ensuite créer une merge request de cette branche à la branche master, merger cette branche dans votre branche de développement, et pousser à nouveau votre branche de développement et votre branche de rapport. Les résultats des exécutions des tests doivent être visibles dans votre page de merge request, et je pourrai naviguer vers votre rapport en html.
+
+_Vous pouvez ajouter des explications, commentaires, ou liens, sous cette ligne_
+
+
+## Intégration et résolution des conflits
+
+A ce moment là seulement je peux accepter de merger dans la branche master. Il est possible qu'il y ait des conflits à gérer entre les contributions. Chaque conflit devra être résolu. Je nommerai l'étudiant qui devra résoudre le conflit. Il devra alors:
+
+- se positionner sur master et faire git pull, pour en récupérer le dernier état
+- récupérer les différentes branches du remote origin avec `git fetch origin`
+- se positionner sur la branche de développement, essayer de merger master, résoudre les conflits, commiter et pousser.
+
+Le conflit devra alors être résolu sur la page de merge request, je pourrai l'accepter et passer au suivant.
+
+_Vous pouvez ajouter des explications, commentaires, ou liens, sous cette ligne_
+
+
+
+## Création d'une image de container
+
+1. Je souhaite avoir une image docker unique pour toutes les tâches d'intégration continue à exécuter. Il doit avoir maven et asciidoctor ( https://asciidoctor.org/docs/install-toolchain/ ). Il doit être publié sur votre profile dockerhub, et utilisable par gitlab CI/CD. (je dois pouvoir tester). Pour créer cette image, vous aurez besoin de comprendre et utiliser au moins les instructions `FROM` et `RUN` du dockerfile.
+
+2. Je souhaite avoir une image docker que je pourrai déployer en mode interactif (options `-it` de docker) pour exécuter le projet calculator en mode interactif. De plus, je veux que le container dise bonjour lorsqu'il est déployé (`docker run`)et à chaque fois que j'exécute une commande (`docker exec`). Le container dit bonjour au monde par défaut, mais on peut lui passer un prénom à qui dire bonjour à la place, en utilisant les variables d'environnement (option `-e` de docker). Pour créer cette image, vous aurez besoin d'utiliser les instructions `FROM`, `COPY`, `ENTRYPOINT`, `CMD`. Des connaissances en programmation shell vous seront bien utiles pour écrire le entrypoint.
+
+_Vous pouvez ajouter des explications, commentaires, ou liens, sous cette ligne_
+

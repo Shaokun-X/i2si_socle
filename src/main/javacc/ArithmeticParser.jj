@@ -1,0 +1,114 @@
+/*
+ * Copyright 2019 École des Mines de Saint-Étienne.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
+options {STATIC=false;}
+PARSER_BEGIN(ArithmeticParser)
+
+package fr.mines_stetienne.ci.i2si.calculator.lang;
+
+import java.io.StringReader;
+import java.io.Reader;
+import fr.mines_stetienne.ci.i2si.calculator.expr.*;
+
+public class ArithmeticParser {
+
+    public ArithmeticParser(String s)
+    {
+        this((Reader)(new StringReader(s)));
+    }
+
+}
+PARSER_END(ArithmeticParser)
+Assignment parseAssignment(): { Variable var = null; Expr expr; }
+{
+  (
+    LOOKAHEAD(2)
+    var = Var()
+    <EQUALS>
+  )?
+  expr = parseExpression()
+  { return new Assignment( var, expr ); }
+}
+Expr parseExpression() : { Expr expr; }
+{
+  expr = AdditiveExpression()
+  { return expr;}
+}
+Expr AdditiveExpression() : { Expr expr1, expr2; }
+{
+  expr1 = MultiplicativeExpression()
+  ( <ADD> expr2 = MultiplicativeExpression() { expr1 = new E_Add(expr1, expr2); }
+  | <SUBTRACT> expr2 = MultiplicativeExpression() { expr1 = new E_Substract(expr1, expr2); }
+  )*
+  { return expr1;}
+}
+Expr MultiplicativeExpression() : { Expr expr1, expr2; }
+{
+  expr1 = UnaryExpression()
+  ( <MULTIPLY> expr2 = UnaryExpression() { expr1 = new E_Multiply(expr1, expr2); }
+  | <DIVIDE> expr2 = UnaryExpression() { expr1 = new E_Divide(expr1, expr2); }
+  )*
+  { return expr1;}
+}
+Expr UnaryExpression() : { Expr expr; }
+{
+  expr = PrimaryExpression() { return expr; } 
+  | <ADD> expr = PrimaryExpression() { return expr; }
+  | <SUBTRACT> expr = PrimaryExpression() { return new E_UnaryMinus(expr); }
+}
+Expr PrimaryExpression() : { Expr expr; }
+{
+  ( expr = BrackettedExpression()
+  | expr = Var()
+  | expr = Value()
+  )
+  { return expr; }
+}
+Expr BrackettedExpression() : { Expr expr; }
+{
+    <LPAREN> expr = parseExpression() <RPAREN> { return expr ; }
+}
+Variable Var() : { Token t; }
+{
+  t = <VARIABLE>
+  { return new Variable(t.image); }
+} 
+Value Value() : { Token t; }
+{
+  t = <VALUE>
+  { return new Value(t.image); }
+}
+
+SKIP: { " " | "\t" | "\r" | "\n" | "\f" }
+SPECIAL_TOKEN : { <SINGLE_LINE_COMMENT: "#" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? > }
+TOKEN: {
+  <#WS: " " | "\t" | "\n" | "\r" | "\f">
+|
+  <#WSC: <WS> | <SINGLE_LINE_COMMENT> >
+}
+TOKEN: {
+      <EQUALS: "=">
+   |  <MULTIPLY:  "*">
+   |  <DIVIDE: "/">
+   |  <ADD: "+">
+   |  <SUBTRACT: "-">
+   |  <LPAREN: "(">
+   |  <RPAREN: ")">
+}
+TOKEN : {
+      <VALUE : (["0"-"9"])+|((["0"-"9"])+(".")(["0"-"9"])+) >
+   |  <VARIABLE : ["a"-"z"](["0"-"9","a"-"z"])* >
+}

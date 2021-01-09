@@ -1,0 +1,45 @@
+default:
+  image: shaokunxie/cicd:latest
+
+stages:
+  - test
+  - build
+
+package:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev-shaokun-devops"'
+  script:
+    - mvn clean
+    - mvn generate-sources
+    - mvn package assembly:single
+    - mvn source:jar javadoc:aggregate-jar
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 30 days
+
+asciidoctor:
+  stage: build
+  script:
+    - asciidoctor rapport/projets.adoc
+  artifacts:
+    paths:
+      - rapport/projets.html
+    expire_in: 30 days
+
+maven-test :
+  stage: test
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev-shaokun-devops"'
+  script:
+    - mvn test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+    paths:
+      - target/surefire-reports/TEST-*.xml
+      - target/failsafe-reports/TEST-*.xml

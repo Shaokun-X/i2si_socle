@@ -1,0 +1,8 @@
+# add here all the temporary folders and files, that should not be pushed to the repository
+#  see the syntax here https://git-scm.com/docs/gitignore
+# example:   /target/
+.settings
+.classpath
+.project
+/target/
+.vscode
